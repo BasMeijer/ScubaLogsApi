@@ -13,6 +13,13 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    next();
+});
+
 var port = process.env.PORT || 8080;        // set our port
 
 var mongoose = require('mongoose');
@@ -63,10 +70,9 @@ router.route('/divelogs')
 
     // create a divelog
     .post(function (req, res) {
-
         var divelog = new DiveLog();
 
-        divelog.username = req.body.username; 
+        divelog.username = req.body.username;
         divelog.date = req.body.date;
         divelog.divelogData = req.body.divelogData;
 
@@ -109,7 +115,7 @@ router.route('/divelogs/divelocations/:location_name')
     .get(function (req, res) {
 
         // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-        DiveLog.findOne({ 'divelogData.location': req.params.location_name }, function (err, divelog) {
+        DiveLog.find({ 'divelogData.location': req.params.location_name }, function (err, divelog) {
             if (err)
                 res.send(err);
             res.json(divelog);
@@ -122,11 +128,11 @@ router.route('/divelocations')
 
     // create a divelocation
     .post(function (req, res) {
-        console.log('test')
         var diveLocation = new DiveLocation();
 
-        diveLocation.name = req.body.name; 
+        diveLocation.name = req.body.name;
         diveLocation.description = req.body.description
+        diveLocation.location = req.body.location
 
         diveLocation.save(function (err) {
             if (err)
@@ -145,6 +151,19 @@ router.route('/divelocations')
 
             res.json(divelocations);
         });
+    });
+
+
+router.route('/divelocations/:location_name')
+
+    .get(function (req, res) {
+
+        // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
+        DiveLocation.findOne({ 'name': req.params.location_name }, function (err, divelocation) {
+            if (err)
+                res.send(err);
+            res.json(divelocation);
+        })
     });
 
 

@@ -12,6 +12,10 @@ var DiveLogSchema   = new Schema({
         depthTemperature: Number,
         diveTime: Number,
         buddy: String,
+        description: String,
+        rating: Number,
+        flora: Number,
+        fauna: Number,
     }
 });
 
