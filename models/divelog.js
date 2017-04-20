@@ -16,6 +16,7 @@ var DiveLogSchema   = new Schema({
         rating: Number,
         flora: Number,
         fauna: Number,
+        visibility: Number,
     }
 });
 

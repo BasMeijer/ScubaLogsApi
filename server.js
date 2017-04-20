@@ -107,6 +107,19 @@ router.route('/divelogs/:divelog_id')
         });
     });
 
+// ----------------------------------------------------
+router.route('/divelogs/users/:username')
+
+    // get the divelogs with a location name
+    .get(function (req, res) {
+
+        // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
+        DiveLog.find({ 'username': req.params.username }, function (err, divelog) {
+            if (err)
+                res.send(err);
+            res.json(divelog);
+        })
+    });
 
 // ----------------------------------------------------
 router.route('/divelogs/divelocations/:location_name')
